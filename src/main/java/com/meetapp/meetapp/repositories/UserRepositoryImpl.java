@@ -14,9 +14,9 @@ public class UserRepositoryImpl implements UserRepository {
     private MongoTemplate mongoTemplate;
 
     @Override
-    public User getUserById(Integer userId) {
+    public User getUserByUserId(Integer userId) {
         Query query = new Query();
-        query.addCriteria(Criteria.where("id").is(userId));
+        query.addCriteria(Criteria.where("userId").is(userId));
         return mongoTemplate.findOne(query, User.class);
     }
 }
