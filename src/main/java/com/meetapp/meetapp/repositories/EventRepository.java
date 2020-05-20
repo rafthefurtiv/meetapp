@@ -1,9 +1,12 @@
 package com.meetapp.meetapp.repositories;
 
-import com.meetapp.meetapp.models.Event;
-import com.meetapp.meetapp.models.User;
+
+import com.google.api.services.calendar.model.Event;
+import com.meetapp.meetapp.models.EventExt;
 
 public interface EventRepository {
 
     Event getEventByUserId(Integer userId);
+
+    EventExt getEventExtByEventId(Integer eventId);
 }

@@ -1,6 +1,7 @@
 package com.meetapp.meetapp.repositories;
 
-import com.meetapp.meetapp.models.Event;
+import com.google.api.services.calendar.model.Event;
+import com.meetapp.meetapp.models.EventExt;
 import com.meetapp.meetapp.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -19,5 +20,12 @@ public class EventRepositoryImpl implements EventRepository {
         Query query = new Query();
         query.addCriteria(Criteria.where("userId").is(userId));
         return mongoTemplate.findOne(query, Event.class);
+    }
+
+    @Override
+    public EventExt getEventExtByEventId(Integer eventId) {
+        Query query = new Query();
+        query.addCriteria(Criteria.where("eventId").is(eventId));
+        return mongoTemplate.findOne(query, EventExt.class);
     }
 }
