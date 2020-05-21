@@ -8,14 +8,14 @@ public class EventExt {
     @Id
     ObjectId id;
 
-    int EventId;
+    int eventId;
 
     public int getEventId() {
-        return EventId;
+        return eventId;
     }
 
     public void setEventId(int eventId) {
-        this.EventId = eventId;
+        this.eventId = eventId;
     }
 
     public ObjectId getId() {

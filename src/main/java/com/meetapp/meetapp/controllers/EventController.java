@@ -9,10 +9,7 @@ import org.apache.http.HttpResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.xml.ws.Response;
 
@@ -21,14 +18,17 @@ import javax.xml.ws.Response;
 public class EventController {
 
     @Autowired
-    UserRepository userRepository;
-
-    @Autowired
     EventRepository eventRepository;
 
     @GetMapping("/get")
-    public ResponseEntity model(@RequestParam(value = "name", defaultValue = "World") String name) {
-        EventExt event = eventRepository.getEventExtByEventId(1);
+    public ResponseEntity model(@RequestParam("eventId") Integer eventId) {
+        EventExt event = eventRepository.getEventExtByEventId(eventId);
+        return new ResponseEntity<>(event, HttpStatus.OK);
+    }
+
+    @PostMapping("/save")
+    public ResponseEntity model(@RequestBody EventExt eventExt) {
+        EventExt event = eventRepository.saveEventExtById(eventExt);
         return new ResponseEntity<>(event, HttpStatus.OK);
     }
 

@@ -9,4 +9,6 @@ public interface EventRepository {
     Event getEventByUserId(Integer userId);
 
     EventExt getEventExtByEventId(Integer eventId);
+
+    EventExt saveEventExtById(EventExt eventExt);
 }

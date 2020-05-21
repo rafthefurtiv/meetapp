@@ -28,4 +28,16 @@ public class EventRepositoryImpl implements EventRepository {
         query.addCriteria(Criteria.where("eventId").is(eventId));
         return mongoTemplate.findOne(query, EventExt.class);
     }
+
+    @Override
+    public EventExt saveEventExtById(EventExt eventExt) {
+        EventExt tempEventExt = getEventExtByEventId(eventExt.getEventId());
+        if(tempEventExt != null){
+            eventExt.setId(tempEventExt.getId());
+        }
+        mongoTemplate.save(eventExt);
+        return eventExt;
+    }
+
+
 }
