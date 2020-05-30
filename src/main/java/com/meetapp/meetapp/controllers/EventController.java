@@ -5,6 +5,7 @@ import com.meetapp.meetapp.models.EventExt;
 import com.meetapp.meetapp.models.User;
 import com.meetapp.meetapp.repositories.EventRepository;
 import com.meetapp.meetapp.repositories.UserRepository;
+import com.meetapp.meetapp.services.EventService;
 import org.apache.http.HttpResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -29,6 +30,8 @@ public class EventController {
     @PostMapping("/save")
     public ResponseEntity model(@RequestBody EventExt eventExt) {
         EventExt event = eventRepository.saveEventExtById(eventExt);
+        EventService ff = new EventService();
+        ff.callPost();
         return new ResponseEntity<>(event, HttpStatus.OK);
     }
 
