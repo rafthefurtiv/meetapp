@@ -28,6 +28,7 @@ public class CredentialController {
     @PostMapping("/saveToken")
     public ResponseEntity model(@RequestBody Token token) {
         Token tempToken = tokenRepository.saveTokenByUserEmail(token.getUserEmail(), token.getToken());
+        System.out.println("SaveToken: " + token.getToken() + " / User: " + token.getUserEmail() + ".");
         return new ResponseEntity<>(tempToken, HttpStatus.OK);
     }
 
