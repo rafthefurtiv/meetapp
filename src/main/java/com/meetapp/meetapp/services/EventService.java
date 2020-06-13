@@ -1,6 +1,7 @@
 package com.meetapp.meetapp.services;
 
 import com.google.api.services.calendar.model.Calendar;
+import com.google.api.services.calendar.model.Event;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -23,5 +24,12 @@ public class EventService {
 
         res.getBody().getTimeZone();
     }
+
+
+    public void getEvents(){
+        EventService eveService = new EventService();
+        eveService.getEvents();
+    }
+
 
 }
