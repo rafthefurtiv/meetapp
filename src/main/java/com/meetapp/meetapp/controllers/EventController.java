@@ -1,5 +1,6 @@
 package com.meetapp.meetapp.controllers;
 
+import com.google.api.services.calendar.Calendar;
 import com.google.api.services.calendar.model.Event;
 import com.meetapp.meetapp.models.EventExt;
 import com.meetapp.meetapp.models.User;
@@ -25,6 +26,18 @@ public class EventController {
     @GetMapping("/get")
     public ResponseEntity model(@RequestParam("eventId") Integer eventId) {
         EventExt event = eventRepository.getEventExtByEventId(eventId);
+        return new ResponseEntity<>(event, HttpStatus.OK);
+    }
+
+    @GetMapping("/getCalendar")
+    public ResponseEntity getGoogleCalendarByEmail(@RequestParam("email") String email) {
+        Calendar calendar = eventRepository.getGoogleCalendarByEmail(email);
+        return new ResponseEntity<>(calendar, HttpStatus.OK);
+    }
+
+    @GetMapping("/getEvents")
+    public ResponseEntity getGoogleEventsByEmail(@RequestParam("email") String email) {
+        Event event = eventRepository.getGoogleEventsByEmail(email);
         return new ResponseEntity<>(event, HttpStatus.OK);
     }
 
