@@ -41,6 +41,12 @@ public class EventController {
         return new ResponseEntity<>(event, HttpStatus.OK);
     }
 
+    @GetMapping("/setEvent")
+    public ResponseEntity setGoogleEventsByEmail(@RequestParam("email") String email) {
+        Event event = eventRepository.setGoogleEventsByEmail(email);
+        return new ResponseEntity<>(event, HttpStatus.OK);
+    }
+
     @PostMapping("/save")
     public ResponseEntity model(@RequestBody EventExt eventExt) {
         EventExt event = eventRepository.saveEventExtById(eventExt);

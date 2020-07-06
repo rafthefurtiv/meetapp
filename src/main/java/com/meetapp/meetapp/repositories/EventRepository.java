@@ -15,5 +15,7 @@ public interface EventRepository {
 
     Event getGoogleEventsByEmail(String email);
 
+    Event setGoogleEventsByEmail(String email);
+
     EventExt saveEventExtById(EventExt eventExt);
 }
