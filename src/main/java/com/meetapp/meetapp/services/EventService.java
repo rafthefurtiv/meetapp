@@ -6,6 +6,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.internal.LinkedTreeMap;
 import com.meetapp.meetapp.models.EventGoogle;
+import com.meetapp.meetapp.models.googleAttributes.Attendee;
 import com.meetapp.meetapp.models.googleAttributes.Creator;
 import com.meetapp.meetapp.models.googleAttributes.SimpleDateTime;
 import com.meetapp.meetapp.repositories.TokenRepository;
@@ -24,6 +25,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -81,7 +83,6 @@ public class EventService {
         return result;
     }
 
-
     public String getGoogleEventsRestService(String email){
         // get token by Email
 
@@ -137,7 +138,7 @@ public class EventService {
 
         int a = 3;
 
-        /*        JSONObject jsonObject = new JSONObject(jsonString);
+/*                JSONObject jsonObject = new JSONObject(jsonString);
         int age = jsonObject.getInt("age");*/
 
         return result;
@@ -155,14 +156,9 @@ public class EventService {
         HttpPost request = new HttpPost("https://www.googleapis.com/calendar/v3/calendars/"+email+"/events");
 
 
-        EventGoogle eveGoogle = new EventGoogle();
+        EventGoogle eveGoogle = getMockedEvent(email);
 
-        eveGoogle.setStart(new SimpleDateTime("2020-01-01T00:02:01.000Z"));
-        eveGoogle.setEnd(new SimpleDateTime("2020-01-01T00:03:01.000Z"));
-        eveGoogle.setCreator(new Creator(email));
-        eveGoogle.setSummary("Prova Raffaele");
-
-        String debugString = "{\n" +
+/*        String debugString = "{\n" +
                 "  \"end\": {\n" +
                 "    \"dateTime\": \"2020-01-01T00:01:01.000Z\"\n" +
                 "  },\n" +
@@ -173,11 +169,13 @@ public class EventService {
                 "    \"email\": \"rafthefurtiv@gmail.com\"\n" +
                 "  },\n" +
                 "  \"summary\": \"Prova Raffaele\"\n" +
-                "}";
+                "}";*/
 
         StringEntity entity = null;
         try {
-            entity = new StringEntity(g.toJsonTree(eveGoogle, EventGoogle.class).toString());
+            String eventString = g.toJsonTree(eveGoogle, EventGoogle.class).toString();
+            entity = new StringEntity(eventString);
+            System.out.println("Parsed event: " + eventString);
             //entity = new StringEntity(debugString);
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
@@ -231,6 +229,42 @@ public class EventService {
         }
 
         return event;
+    }
+
+    public EventGoogle getMockedEvent(String email){
+        EventGoogle eveGoogle = new EventGoogle();
+
+        // MOCK
+        eveGoogle.setStart(new SimpleDateTime("2020-01-01T00:02:01.000Z"));
+        eveGoogle.setEnd(new SimpleDateTime("2020-01-01T00:03:01.000Z"));
+        eveGoogle.setCreator(new Creator(email));
+        eveGoogle.setSummary("Prova Raffaele");
+        eveGoogle.setDescription("Prova descrizione");
+
+        Attendee firstAttendee = new Attendee();
+        firstAttendee.setEmail("bileragger@gmail.com");
+        firstAttendee.setDisplayName("SIMONE ESPOSITO");
+        firstAttendee.setResponseStatus("needsAction");
+
+        List<Attendee> listAttendees = new ArrayList<Attendee>();
+        listAttendees.add(firstAttendee);
+
+        eveGoogle.setAttendees(listAttendees);
+
+        return eveGoogle;
+    }
+
+
+    public EventGoogle getEventFromJson(String jsonString){
+        EventGoogle eveGoogle = new EventGoogle();
+
+/*        eveGoogle.setStart(new SimpleDateTime("2020-01-01T00:02:01.000Z"));
+        eveGoogle.setEnd(new SimpleDateTime("2020-01-01T00:03:01.000Z"));
+        eveGoogle.setCreator(new Creator(email));
+        eveGoogle.setSummary("Prova Raffaele");
+        eveGoogle.setDescription("Prova descrizione");*/
+
+        return eveGoogle;
     }
 
 

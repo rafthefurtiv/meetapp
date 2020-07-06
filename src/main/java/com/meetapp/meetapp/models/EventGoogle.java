@@ -1,7 +1,10 @@
 package com.meetapp.meetapp.models;
 
+import com.meetapp.meetapp.models.googleAttributes.Attendee;
 import com.meetapp.meetapp.models.googleAttributes.Creator;
 import com.meetapp.meetapp.models.googleAttributes.SimpleDateTime;
+
+import java.util.List;
 
 public class EventGoogle {
 
@@ -9,6 +12,24 @@ public class EventGoogle {
     SimpleDateTime end;
     Creator creator;
     String summary;
+    String description;
+    List<Attendee> attendees;
+
+    public List<Attendee> getAttendees() {
+        return attendees;
+    }
+
+    public void setAttendees(List<Attendee> attendees) {
+        this.attendees = attendees;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
     public String getSummary() {
         return summary;
