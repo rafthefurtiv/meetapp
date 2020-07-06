@@ -153,7 +153,7 @@ public class EventService {
 
         final CloseableHttpClient httpClient = HttpClients.createDefault();
 
-        HttpPost request = new HttpPost("https://www.googleapis.com/calendar/v3/calendars/"+email+"/events");
+        HttpPost request = new HttpPost("https://www.googleapis.com/calendar/v3/calendars/"+email+"/events?sendNotifications=true&sendUpdates=all");
 
 
         EventGoogle eveGoogle = getMockedEvent(email);
@@ -235,16 +235,17 @@ public class EventService {
         EventGoogle eveGoogle = new EventGoogle();
 
         // MOCK
-        eveGoogle.setStart(new SimpleDateTime("2020-01-01T00:02:01.000Z"));
-        eveGoogle.setEnd(new SimpleDateTime("2020-01-01T00:03:01.000Z"));
+        eveGoogle.setStart(new SimpleDateTime("2020-07-07T01:02:01.000Z"));
+        eveGoogle.setEnd(new SimpleDateTime("2020-07-07T01:03:01.000Z"));
         eveGoogle.setCreator(new Creator(email));
-        eveGoogle.setSummary("Prova Raffaele");
-        eveGoogle.setDescription("Prova descrizione");
+        eveGoogle.setSummary("Prova Raffaele con accettazione automatica");
+        eveGoogle.setDescription("Prova descrizione accettazione automatica");
 
         Attendee firstAttendee = new Attendee();
         firstAttendee.setEmail("bileragger@gmail.com");
         firstAttendee.setDisplayName("SIMONE ESPOSITO");
         firstAttendee.setResponseStatus("needsAction");
+        //firstAttendee.setResponseStatus("accepted");
 
         List<Attendee> listAttendees = new ArrayList<Attendee>();
         listAttendees.add(firstAttendee);
