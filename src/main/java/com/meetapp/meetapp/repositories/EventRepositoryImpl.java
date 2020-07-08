@@ -24,6 +24,8 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 @Repository
 public class EventRepositoryImpl implements EventRepository {
@@ -41,10 +43,28 @@ public class EventRepositoryImpl implements EventRepository {
     }
 
     @Override
-    public EventExt getEventExtByEventId(Integer eventId) {
+    public EventExt getEventExtByEventId(String eventId) {
         Query query = new Query();
         query.addCriteria(Criteria.where("eventId").is(eventId));
         return mongoTemplate.findOne(query, EventExt.class);
+    }
+
+    @Override
+    public List<EventExt> getEventsExtByEmail(String email) {
+        Query query = new Query();
+        query.addCriteria(Criteria.where("email").is(email));
+        return mongoTemplate.find(query, EventExt.class);
+    }
+
+    @Override
+    public List<String> getGoogleEvetsByListId(List<String> ids, String email) {
+        List<String> eventsStrings = new ArrayList<>();
+
+        ids.forEach(id -> {
+            eventsStrings.add(getGoogleEventById(id, email));
+        });
+
+        return eventsStrings;
     }
 
     @Override
@@ -60,8 +80,20 @@ public class EventRepositoryImpl implements EventRepository {
     }
 
     @Override
+    public String getGoogleEventById(String id, String email) {
+        String res = eventService.getGoogleEventById(id, email);
+        return res;
+    }
+
+    @Override
     public Event setGoogleEventsByEmail(String email, String jsonEvent) {
-        String res = eventService.setGoogleEventsRestService(email, jsonEvent);
+        String idEvent = eventService.setGoogleEventsRestService(email, jsonEvent);
+
+        EventExt eventExt = new EventExt();
+        eventExt.setEventId(idEvent);
+        eventExt.setEmail(email);
+
+        saveEventExtById(eventExt);
         return null;
     }
 

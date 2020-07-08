@@ -17,6 +17,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.xml.ws.Response;
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 @CrossOrigin
@@ -26,11 +28,38 @@ public class EventController {
     @Autowired
     EventRepository eventRepository;
 
-    @GetMapping("/get")
-    public ResponseEntity model(@RequestParam("eventId") Integer eventId) {
+    @GetMapping("/getEventExt")
+    public ResponseEntity getEventExt(@RequestParam("eventExtId") String eventExtId) {
         MeetappApplication.logger.info(new Object(){}.getClass().getName() + " - "+ new Object(){}.getClass().getEnclosingMethod().getName());
-        EventExt event = eventRepository.getEventExtByEventId(eventId);
+        EventExt event = eventRepository.getEventExtByEventId(eventExtId);
         return new ResponseEntity<>(event, HttpStatus.OK);
+    }
+
+    @GetMapping("/getEventsExt")
+    public ResponseEntity getEventExtByEmail(@RequestParam("email") String email) {
+        MeetappApplication.logger.info(new Object(){}.getClass().getName() + " - "+ new Object(){}.getClass().getEnclosingMethod().getName());
+        List<EventExt> events = eventRepository.getEventsExtByEmail(email);
+        return new ResponseEntity<>(events, HttpStatus.OK);
+    }
+
+    @GetMapping("/getEventsByEmail")
+    public ResponseEntity getEventsByEmail(@RequestParam("email") String email) {
+        MeetappApplication.logger.info(new Object(){}.getClass().getName() + " - "+ new Object(){}.getClass().getEnclosingMethod().getName());
+        List<EventExt> events = eventRepository.getEventsExtByEmail(email);
+        List<String> ids = new ArrayList<>();
+        events.stream().map(EventExt::getEventId).forEach(s -> ids.add(s));
+        List<String> eventsJson = eventRepository.getGoogleEvetsByListId(ids, email);
+
+        return new ResponseEntity<>(eventsJson, HttpStatus.OK);
+    }
+
+    @GetMapping("/getAppEventsByEmail")
+    public ResponseEntity getAppEventsByEmail(@RequestParam("email") String email) {
+        MeetappApplication.logger.info(new Object(){}.getClass().getName() + " - "+ new Object(){}.getClass().getEnclosingMethod().getName());
+        List<EventExt> eventsExt = eventRepository.getEventsExtByEmail(email);
+
+        List<EventExt> events = eventRepository.getEventsExtByEmail(email);
+        return new ResponseEntity<>(events, HttpStatus.OK);
     }
 
     @GetMapping("/getCalendar")

@@ -8,13 +8,23 @@ public class EventExt {
     @Id
     ObjectId id;
 
-    int eventId;
+    String eventId;
 
-    public int getEventId() {
+    String email;
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getEventId() {
         return eventId;
     }
 
-    public void setEventId(int eventId) {
+    public void setEventId(String eventId) {
         this.eventId = eventId;
     }
 

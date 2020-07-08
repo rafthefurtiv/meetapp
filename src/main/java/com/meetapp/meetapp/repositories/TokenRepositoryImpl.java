@@ -1,5 +1,6 @@
 package com.meetapp.meetapp.repositories;
 
+import com.meetapp.meetapp.MeetappApplication;
 import com.meetapp.meetapp.models.Token;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -17,7 +18,9 @@ public class TokenRepositoryImpl implements TokenRepository {
     public Token getTokenByUserEmail(String userEmail) {
         Query query = new Query();
         query.addCriteria(Criteria.where("userEmail").is(userEmail));
-        return mongoTemplate.findOne(query, Token.class);
+        Token token = mongoTemplate.findOne(query, Token.class);
+        MeetappApplication.logger.debug("Get token for "+ token.getUserEmail()+": " + token.getToken());
+        return token;
     }
 
     @Override

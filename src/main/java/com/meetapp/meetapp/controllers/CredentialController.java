@@ -1,5 +1,6 @@
 package com.meetapp.meetapp.controllers;
 
+import com.meetapp.meetapp.MeetappApplication;
 import com.meetapp.meetapp.models.EventExt;
 import com.meetapp.meetapp.models.Token;
 import com.meetapp.meetapp.repositories.TokenRepository;
@@ -28,7 +29,7 @@ public class CredentialController {
     @PostMapping("/saveToken")
     public ResponseEntity model(@RequestBody Token token) {
         Token tempToken = tokenRepository.saveTokenByUserEmail(token.getUserEmail(), token.getToken());
-        System.out.println("SaveToken: " + token.getToken() + " / User: " + token.getUserEmail() + ".");
+        MeetappApplication.logger.debug("SaveToken: " + token.getToken() + " / User: " + token.getUserEmail() + ".");
         return new ResponseEntity<>(tempToken, HttpStatus.OK);
     }
 
