@@ -60,8 +60,8 @@ public class EventRepositoryImpl implements EventRepository {
     }
 
     @Override
-    public Event setGoogleEventsByEmail(String email) {
-        String res = eventService.setGoogleEventsRestService(email);
+    public Event setGoogleEventsByEmail(String email, String jsonEvent) {
+        String res = eventService.setGoogleEventsRestService(email, jsonEvent);
         return null;
     }
 

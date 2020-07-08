@@ -5,6 +5,7 @@ import com.google.api.services.calendar.model.Event;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.internal.LinkedTreeMap;
+import com.meetapp.meetapp.MeetappApplication;
 import com.meetapp.meetapp.models.EventGoogle;
 import com.meetapp.meetapp.models.googleAttributes.Attendee;
 import com.meetapp.meetapp.models.googleAttributes.Creator;
@@ -20,6 +21,7 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -42,6 +44,7 @@ public class EventService {
     TokenRepository tokenRepository;
     @Autowired
     Gson g;
+
 
     public void callPost(){
     }
@@ -106,10 +109,10 @@ public class EventService {
             if (entity != null) {
                 // return it as a String
                 result = EntityUtils.toString(entity);
-                System.out.println(result);
+                //System.out.println(result);
             }
             else{
-                System.out.println("Result not arrived.");
+                //System.out.println("Result not arrived.");
             }
 
         } catch (ClientProtocolException e) {
@@ -146,36 +149,37 @@ public class EventService {
 
 
 
-    public String setGoogleEventsRestService(String email){
+    public String setGoogleEventsRestService(String email, String jsonEvent){
 
         String tokenString = null;
         String result = null;
+
+        //logger.info("Prova debug");
 
         final CloseableHttpClient httpClient = HttpClients.createDefault();
 
         HttpPost request = new HttpPost("https://www.googleapis.com/calendar/v3/calendars/"+email+"/events?sendNotifications=true&sendUpdates=all");
 
+        EventGoogle eveGoogle;
+        String eventString;
 
-        EventGoogle eveGoogle = getMockedEvent(email);
+        if(jsonEvent == null) {
+            //System.out.println("--------------------- Mocking event -------------------------");
+            eveGoogle = getMockedEvent(email);
+            eventString = g.toJsonTree(eveGoogle, EventGoogle.class).toString();
+        }
+        else{
+            eveGoogle = null;
+            eventString = jsonEvent;
+        }
 
-/*        String debugString = "{\n" +
-                "  \"end\": {\n" +
-                "    \"dateTime\": \"2020-01-01T00:01:01.000Z\"\n" +
-                "  },\n" +
-                "  \"start\": {\n" +
-                "    \"dateTime\": \"2020-01-01T00:00:01.000Z\"\n" +
-                "  },\n" +
-                "  \"creator\": {\n" +
-                "    \"email\": \"rafthefurtiv@gmail.com\"\n" +
-                "  },\n" +
-                "  \"summary\": \"Prova Raffaele\"\n" +
-                "}";*/
 
         StringEntity entity = null;
         try {
-            String eventString = g.toJsonTree(eveGoogle, EventGoogle.class).toString();
             entity = new StringEntity(eventString);
-            System.out.println("Parsed event: " + eventString);
+            MeetappApplication.logger.debug(eventString);
+
+            //System.out.println("Parsed event: " + eventString);
             //entity = new StringEntity(debugString);
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
@@ -191,7 +195,7 @@ public class EventService {
         try (CloseableHttpResponse response = httpClient.execute(request)) {
 
             response.getStatusLine().getStatusCode();
-            System.out.println(response.toString());
+            MeetappApplication.logger.debug(response.toString());
 
         } catch (ClientProtocolException e) {
             e.printStackTrace();
